@@ -2,7 +2,7 @@
 
 PROJECT_DIR=code
 REPORT_FILE=rapport.pdf
-PROJECT_FILE=PCO_Labo_3.pro
+PROJECT_FILE=PCO_Labo_2.pro
 ARCHIVE=rendu.tar.gz
 
 if [ ! -d "$PROJECT_DIR" ]
