@@ -65,4 +65,5 @@ void ComputationManager::provideResult(Result result) {
 
 void ComputationManager::stop() {
     // TODO
+
 }
