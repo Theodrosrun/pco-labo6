@@ -18,48 +18,44 @@ ComputationManager::ComputationManager(int maxQueueSize): MAX_TOLERATED_QUEUE_SI
 {
     requestQueue = std::deque<Request>();
     resultQueue = std::deque<Result>();
+    // TODO
 }
 
 int ComputationManager::requestComputation(Computation c) {
-
     monitorIn();
-
     int id = nextId++;
-    requestQueue.push_back(Request(c, id));
+    requestQueue.push_back(Request(c,id));
     signal(condition);
-
     monitorOut();
-
     return id;
 }
 
 void ComputationManager::abortComputation(int id) {
-
     monitorIn();
-
     for (auto it = requestQueue.begin(); it != requestQueue.end(); ++it) {
         if (it->getId() == id) {
             requestQueue.erase(it);
             break;
         }
     }
-
     monitorOut();
 }
 
 Result ComputationManager::getNextResult() {
+    // TODO
+    // Replace all of the code below by your code
 
+    // Filled with some code in order to make the thread in the UI wait
     monitorIn();
 
     while (requestQueue.empty()) {
         wait(condition);
     }
-
     Request nextRequest = requestQueue.front();
     requestQueue.pop_front();
 
     // Création du résultat correspondant
-    Result nextResult = Result(nextRequest.getId(), 4.0);
+    Result nextResult = Result(nextRequest.getId(), );// Fonction pour traiter le résultat suivant de la file d'attente
 
     monitorOut();
 
@@ -67,6 +63,11 @@ Result ComputationManager::getNextResult() {
 }
 
 Request ComputationManager::getWork(ComputationType computationType) {
+    // TODO
+    // Replace all of the code below by your code
+
+    // Filled with arbitrary code in order to make the callers wait
+
 
     monitorIn(); // Entrée dans le moniteur pour protéger l'accès concurrentiel
 
@@ -90,32 +91,31 @@ Request ComputationManager::getWork(ComputationType computationType) {
 }
 
 bool ComputationManager::continueWork(int id) {
+    // TODO
 
-    monitorIn();
+    monitorIn(); // Entrée dans le moniteur pour protéger l'accès concurrentiel
 
+    // Recherche de la requête associée à l'ID donné dans la file d'attente
     for (auto it = requestQueue.begin(); it != requestQueue.end(); ++it) {
         if (it->getId() == id) {
-            // Ici, vous pouvez effectuer le traitement de la demande en fonction de certains critères
+            // Traitement de la demande en fonction de certains critères
             // Par exemple, marquer la demande pour continuer à travailler ou non
-
-            monitorOut();
-
-            return true; // ou false en fonction de la logique que vous voulez implémenter
+            // return true; // ou false en fonction de la logique que tu veux implémenter
         }
     }
 
-    monitorOut();
+    monitorOut(); // Sortie du moniteur après l'opération critique
 
-    return false;
+    // Retourne une valeur par défaut si l'ID n'est pas trouvé ou si le traitement est terminé
+    return false; // ou true en fonction de la logique que tu veux implémenter
+    return true;
 }
 
 void ComputationManager::provideResult(Result result) {
-
+    // TODO
     monitorIn();
-
     resultQueue.push_back(result); // Ajouter le résultat à la file d'attente
     signal(condition); // Signaler qu'un résultat est disponible
-
     monitorOut();
 }
 

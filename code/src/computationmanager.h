@@ -197,8 +197,9 @@ private:
     inline void throwStopException() {throw StopException();}
 
     int nextId = 0;
-
+    std::deque<Result> resultQueue;
     std::deque<Request> requestQueue;
+
     Condition condition;
 };
 
