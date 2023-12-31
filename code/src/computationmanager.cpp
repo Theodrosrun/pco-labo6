@@ -17,7 +17,6 @@
 ComputationManager::ComputationManager(int maxQueueSize): MAX_TOLERATED_QUEUE_SIZE(maxQueueSize)
 {
     requestQueue = std::deque<Request>();
-    stopped = false;
     // TODO
 }
 
