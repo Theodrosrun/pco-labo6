@@ -16,16 +16,23 @@
 
 ComputationManager::ComputationManager(int maxQueueSize): MAX_TOLERATED_QUEUE_SIZE(maxQueueSize)
 {
+    requestQueue = std::deque<Request>();
+    stopped = false;
     // TODO
 }
 
 int ComputationManager::requestComputation(Computation c) {
-    // TODO
-    return -1;
+    requestQueue.push_back(Request(c, nextId++));
+    return nextId;
 }
 
 void ComputationManager::abortComputation(int id) {
-    // TODO
+    for (auto it = requestQueue.begin(); it != requestQueue.end(); ++it) {
+        if (it->getId() == id) {
+            requestQueue.erase(it);
+            break;
+        }
+    }
 }
 
 Result ComputationManager::getNextResult() {
@@ -34,11 +41,13 @@ Result ComputationManager::getNextResult() {
 
     // Filled with some code in order to make the thread in the UI wait
     monitorIn();
-    auto c = Condition();
-    wait(c);
+    while (requestQueue.empty()) {
+        wait(condition);
+    }
+    Request nextRequest = requestQueue.front();
+    requestQueue.pop_front();
     monitorOut();
-
-    return Result(-1, 0.0);
+    return nextRequest;
 }
 
 Request ComputationManager::getWork(ComputationType computationType) {

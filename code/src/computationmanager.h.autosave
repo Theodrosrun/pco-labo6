@@ -203,6 +203,7 @@ private:
     std::deque<Request> requestQueue;
     PcoSemaphore mtx;
     Condition condition;
+    PcoHoareMonitor hoareMonitor;
     bool stopped;
 };
 
