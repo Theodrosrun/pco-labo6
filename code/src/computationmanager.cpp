@@ -17,12 +17,17 @@
 ComputationManager::ComputationManager(int maxQueueSize): MAX_TOLERATED_QUEUE_SIZE(maxQueueSize)
 {
     requestQueue = std::deque<Request>();
+    resultQueue = std::deque<Result>();
     // TODO
 }
 
 int ComputationManager::requestComputation(Computation c) {
-    requestQueue.push_back(Request(c, nextId++));
-    return nextId;
+    monitorIn();
+    int id = nextId++;
+    requestQueue.push_back(Request(c,id));
+    signal(condition);
+    monitorOut();
+    return id;
 }
 
 void ComputationManager::abortComputation(int id) {
@@ -45,8 +50,11 @@ Result ComputationManager::getNextResult() {
     }
     Request nextRequest = requestQueue.front();
     requestQueue.pop_front();
+
+    // Création du résultat correspondant
+    Result nextResult = Result(nextRequest.getId(), 4.0);// Fonction pour traiter le résultat suivant de la file d'attente
     monitorOut();
-    return nextRequest;
+    return nextResult;
 }
 
 Request ComputationManager::getWork(ComputationType computationType) {
@@ -54,21 +62,56 @@ Request ComputationManager::getWork(ComputationType computationType) {
     // Replace all of the code below by your code
 
     // Filled with arbitrary code in order to make the callers wait
-    monitorIn();
-    auto c = Condition();
-    wait(c);
-    monitorOut();
 
-    return Request(Computation(computationType), -1);
+
+    monitorIn(); // Entrée dans le moniteur pour protéger l'accès concurrentiel
+
+    while(requestQueue.empty()) {
+        wait(condition);
+    }
+
+    Request foundRequest;
+
+    for (auto it = requestQueue.begin(); it != requestQueue.end(); ++it) {
+        if (it->data) {
+            foundRequest = *it;
+            requestQueue.erase(it); // Supprimer la requête trouvée de la file d'attente
+            break;
+        }
+    }
+
+    monitorOut(); // Sortie du moniteur après l'opération critique
+
+    return foundRequest;
 }
 
 bool ComputationManager::continueWork(int id) {
     // TODO
+
+    monitorIn(); // Entrée dans le moniteur pour protéger l'accès concurrentiel
+
+    // Recherche de la requête associée à l'ID donné dans la file d'attente
+    for (auto it = requestQueue.begin(); it != requestQueue.end(); ++it) {
+        if (it->getId() == id) {
+            // Traitement de la demande en fonction de certains critères
+            // Par exemple, marquer la demande pour continuer à travailler ou non
+            // return true; // ou false en fonction de la logique que tu veux implémenter
+        }
+    }
+
+    monitorOut(); // Sortie du moniteur après l'opération critique
+
+    // Retourne une valeur par défaut si l'ID n'est pas trouvé ou si le traitement est terminé
+    return false; // ou true en fonction de la logique que tu veux implémenter
     return true;
 }
 
 void ComputationManager::provideResult(Result result) {
     // TODO
+    monitorIn();
+    resultQueue.push_back(result); // Ajouter le résultat à la file d'attente
+    signal(condition); // Signaler qu'un résultat est disponible
+    monitorOut();
 }
 
 void ComputationManager::stop() {

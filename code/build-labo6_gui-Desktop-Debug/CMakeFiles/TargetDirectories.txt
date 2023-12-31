@@ -1,0 +1,4 @@
+/home/reds/Desktop/PCO/pco-labo6/code/build-labo6_gui-Desktop-Debug/CMakeFiles/PCO_lab06_gui.dir
+/home/reds/Desktop/PCO/pco-labo6/code/build-labo6_gui-Desktop-Debug/CMakeFiles/edit_cache.dir
+/home/reds/Desktop/PCO/pco-labo6/code/build-labo6_gui-Desktop-Debug/CMakeFiles/rebuild_cache.dir
+/home/reds/Desktop/PCO/pco-labo6/code/build-labo6_gui-Desktop-Debug/CMakeFiles/PCO_lab06_gui_autogen.dir

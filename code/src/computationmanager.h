@@ -198,12 +198,8 @@ private:
 
     int nextId = 0;
 
-
-    // Variables membres et fonctions privées nécessaires
     std::deque<Request> requestQueue;
-    PcoSemaphore mtx;
     Condition condition;
-    bool stopped;
 };
 
 #endif // COMPUTATIONMANAGER_H

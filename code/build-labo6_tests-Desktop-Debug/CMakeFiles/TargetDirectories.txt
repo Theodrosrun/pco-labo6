@@ -1,0 +1,4 @@
+/home/reds/Desktop/PCO/pco-labo6/code/build-labo6_tests-Desktop-Debug/CMakeFiles/PCO_lab06_tests.dir
+/home/reds/Desktop/PCO/pco-labo6/code/build-labo6_tests-Desktop-Debug/CMakeFiles/edit_cache.dir
+/home/reds/Desktop/PCO/pco-labo6/code/build-labo6_tests-Desktop-Debug/CMakeFiles/rebuild_cache.dir
+/home/reds/Desktop/PCO/pco-labo6/code/build-labo6_tests-Desktop-Debug/CMakeFiles/PCO_lab06_tests_autogen.dir

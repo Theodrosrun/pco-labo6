@@ -1,0 +1,2 @@
+/usr/bin/ar qc liblabo6_lib.a CMakeFiles/labo6_lib.dir/computationmanager.o CMakeFiles/labo6_lib.dir/computeengine.o
+/usr/bin/ranlib liblabo6_lib.a
