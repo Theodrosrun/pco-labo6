@@ -1,9 +1,10 @@
-//     ____  __________     ___   ____ ___  _____ //
-//    / __ \/ ____/ __ \   |__ \ / __ \__ \|__  / //
-//   / /_/ / /   / / / /   __/ // / / /_/ / /_ <  //
-//  / ____/ /___/ /_/ /   / __// /_/ / __/___/ /  //
-// /_/    \____/\____/   /____/\____/____/____/   //
-// Auteurs : Prénom Nom, Prénom Nom
+//_______________________________________________________________________________________________
+//
+//! \file    computationmanager.h
+//! \brief   Fichier header de la classe ComputationManager
+//!
+//! \author  Bugna Valentin, Theodros Mulugeta
+//_______________________________________________________________________________________________
 
 // La déclaration de la classe ComputationManager se trouve en bas du fichier,
 // ajoutez-y les attributs (et fonctions au besoin) pour votre implémentation.

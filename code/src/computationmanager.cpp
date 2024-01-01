@@ -1,10 +1,10 @@
-//     ____  __________     ___   ____ ___  _____ //
-//    / __ \/ ____/ __ \   |__ \ / __ \__ \|__  / //
-//   / /_/ / /   / / / /   __/ // / / /_/ / /_ <  //
-//  / ____/ /___/ /_/ /   / __// /_/ / __/___/ /  //
-// /_/    \____/\____/   /____/\____/____/____/   //
-// Auteurs : Prénom Nom, Prénom Nom
-
+//_______________________________________________________________________________________________
+//
+//! \file    computationmanager.cpp
+//! \brief   Fichier source de la classe ComputationManager
+//!
+//! \author  Bugna Valentin, Theodros Mulugeta
+//_______________________________________________________________________________________________
 
 // A vous de remplir les méthodes, vous pouvez ajouter des attributs ou méthodes pour vous aider
 // déclarez les dans ComputationManager.h et définissez les méthodes ici.
