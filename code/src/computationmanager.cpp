@@ -26,12 +26,12 @@ int ComputationManager::requestComputation(Computation c) {
     const unsigned type = static_cast<unsigned>(c.computationType);
 
     if (requests[type].size() >= MAX_TOLERATED_QUEUE_SIZE) {
-        wait(bufferNotFull[type]);
+        wait(requestsNotFull[type]);
     }
 
     requests[type].push(Request(c, id));
 
-    signal(bufferNotEmpty[type]);
+    signal(requestsNotEmpty[type]);
 
     monitorOut();
 
@@ -61,6 +61,7 @@ void ComputationManager::abortComputation(int id) {
 //    }
 
 //    monitorOut();
+
 }
 
 Result ComputationManager::getNextResult() {
@@ -87,6 +88,7 @@ Result ComputationManager::getNextResult() {
 //    monitorOut();
 
 //    return nextResult;
+
 }
 
 Request ComputationManager::getWork(ComputationType computationType) {
@@ -96,13 +98,13 @@ Request ComputationManager::getWork(ComputationType computationType) {
     const unsigned type = static_cast<unsigned>(computationType);
 
     if (requests[type].size() == 0) {
-       wait(bufferNotEmpty[type]);
+       wait(requestsNotEmpty[type]);
     }
 
     Request request = requests[type].front();
     requests[type].pop();
 
-    signal(bufferNotFull[type]);
+    signal(requestsNotFull[type]);
 
     monitorOut();
 
@@ -127,6 +129,7 @@ Request ComputationManager::getWork(ComputationType computationType) {
 //    monitorOut(); // Sortie du moniteur après l'opération critique
 
 //    return foundRequest;
+
 }
 
 bool ComputationManager::continueWork(int id) {
@@ -157,6 +160,7 @@ void ComputationManager::provideResult(Result result) {
 //    signal(condition); // Signaler qu'un résultat est disponible
 
 //    monitorOut();
+
 }
 
 void ComputationManager::stop() {

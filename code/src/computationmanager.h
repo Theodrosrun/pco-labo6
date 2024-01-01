@@ -201,10 +201,10 @@ private:
 
     static const unsigned NUM_OF_TYPES = 3;
 
-    Condition bufferNotFull[NUM_OF_TYPES];
-    Condition bufferNotEmpty[NUM_OF_TYPES];
-
     std::queue<Request> requests[NUM_OF_TYPES];
+    Condition requestsNotFull[NUM_OF_TYPES];
+    Condition requestsNotEmpty[NUM_OF_TYPES];
+
     std::queue<Result> results[NUM_OF_TYPES];
 };
 
