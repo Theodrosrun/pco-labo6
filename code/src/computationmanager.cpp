@@ -84,6 +84,23 @@ Result ComputationManager::getNextResult() {
 
 Request ComputationManager::getWork(ComputationType computationType) {
 
+        monitorIn();
+
+        const unsigned type = static_cast<int>(computationType);
+
+        if (requests[type].empty()) {
+           wait(bufferNotEmpty[type]);
+        }
+
+        Request request = requests[type].front();
+        requests[type].pop();
+
+        signal(bufferNotFull[type]);
+
+        monitorOut();
+
+        return request;
+
 //    monitorIn(); // Entrée dans le moniteur pour protéger l'accès concurrentiel
 
 //    while(requestQueue.empty()) {
