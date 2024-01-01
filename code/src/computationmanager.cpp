@@ -16,107 +16,122 @@
 
 ComputationManager::ComputationManager(int maxQueueSize): MAX_TOLERATED_QUEUE_SIZE(maxQueueSize)
 {
-    requestQueue = std::deque<Request>();
-    resultQueue = std::deque<Result>();
 }
 
 int ComputationManager::requestComputation(Computation c) {
 
     monitorIn();
 
-    int id = nextId++;
-    requestQueue.push_back(Request(c, id));
-    signal(condition);
+    unsigned id = nextId++;
+    unsigned type = static_cast<unsigned>(c.computationType);
+
+    if (requests[type].size() >= MAX_TOLERATED_QUEUE_SIZE) {
+        wait(bufferNotFull[type]);
+    }
+
+    requests[type].push(Request(c, id));
+
+    signal(bufferNotEmpty[type]);
 
     monitorOut();
 
     return id;
+
+//    monitorIn();
+
+//    int id = nextId++;
+//    requestQueue.push_back(Request(c, id));
+//    signal(condition);
+
+//    monitorOut();
+
+//    return id;
 }
 
 void ComputationManager::abortComputation(int id) {
 
-    monitorIn();
+//    monitorIn();
 
-    for (auto it = requestQueue.begin(); it != requestQueue.end(); ++it) {
-        if (it->getId() == id) {
-            requestQueue.erase(it);
-            break;
-        }
-    }
+//    for (auto it = requestQueue.begin(); it != requestQueue.end(); ++it) {
+//        if (it->getId() == id) {
+//            requestQueue.erase(it);
+//            break;
+//        }
+//    }
 
-    monitorOut();
+//    monitorOut();
 }
 
 Result ComputationManager::getNextResult() {
 
-    monitorIn();
+//    monitorIn();
 
-    while (requestQueue.empty()) {
-        wait(condition);
-    }
+//    while (requestQueue.empty()) {
+//        wait(condition);
+//    }
 
-    Request nextRequest = requestQueue.front();
-    requestQueue.pop_front();
+//    Request nextRequest = requestQueue.front();
+//    requestQueue.pop_front();
 
-    // Création du résultat correspondant
-    Result nextResult = Result(nextRequest.getId(), 4.0);
+//    // Création du résultat correspondant
+//    Result nextResult = Result(nextRequest.getId(), 4.0);
 
-    monitorOut();
+//    monitorOut();
 
-    return nextResult;
+//    return nextResult;
 }
 
 Request ComputationManager::getWork(ComputationType computationType) {
 
-    monitorIn(); // Entrée dans le moniteur pour protéger l'accès concurrentiel
+//    monitorIn(); // Entrée dans le moniteur pour protéger l'accès concurrentiel
 
-    while(requestQueue.empty()) {
-        wait(condition);
-    }
+//    while(requestQueue.empty()) {
+//        wait(condition);
+//    }
 
-    Request foundRequest;
+//    Request foundRequest;
 
-    for (auto it = requestQueue.begin(); it != requestQueue.end(); ++it) {
-        if (it->data) {
-            foundRequest = *it;
-            requestQueue.erase(it); // Supprimer la requête trouvée de la file d'attente
-            break;
-        }
-    }
+//    for (auto it = requestQueue.begin(); it != requestQueue.end(); ++it) {
+//        if (it->data) {
+//            foundRequest = *it;
+//            requestQueue.erase(it); // Supprimer la requête trouvée de la file d'attente
+//            break;
+//        }
+//    }
 
-    monitorOut(); // Sortie du moniteur après l'opération critique
+//    monitorOut(); // Sortie du moniteur après l'opération critique
 
-    return foundRequest;
+//    return foundRequest;
 }
 
 bool ComputationManager::continueWork(int id) {
 
-    monitorIn();
+//    monitorIn();
 
-    for (auto it = requestQueue.begin(); it != requestQueue.end(); ++it) {
-        if (it->getId() == id) {
-            // Ici, vous pouvez effectuer le traitement de la demande en fonction de certains critères
-            // Par exemple, marquer la demande pour continuer à travailler ou non
+//    for (auto it = requestQueue.begin(); it != requestQueue.end(); ++it) {
+//        if (it->getId() == id) {
+//            // Ici, vous pouvez effectuer le traitement de la demande en fonction de certains critères
+//            // Par exemple, marquer la demande pour continuer à travailler ou non
 
-            monitorOut();
+//            monitorOut();
 
-            return true; // ou false en fonction de la logique que vous voulez implémenter
-        }
-    }
+//            return true; // ou false en fonction de la logique que vous voulez implémenter
+//        }
+//    }
 
-    monitorOut();
+//    monitorOut();
 
     return false;
 }
 
 void ComputationManager::provideResult(Result result) {
 
-    monitorIn();
+//    monitorIn();
 
-    resultQueue.push_back(result); // Ajouter le résultat à la file d'attente
-    signal(condition); // Signaler qu'un résultat est disponible
+//    resultQueue.push_back(result); // Ajouter le résultat à la file d'attente
+//    signal(condition); // Signaler qu'un résultat est disponible
 
-    monitorOut();
+//    monitorOut();
 }
 
 void ComputationManager::stop() {

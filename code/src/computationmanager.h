@@ -197,11 +197,15 @@ private:
      */
     inline void throwStopException() {throw StopException();}
 
-    int nextId = 0;
-    std::deque<Result> resultQueue;
-    std::deque<Request> requestQueue;
+    static const int NUM_OF_TYPES = 3;
 
-    Condition condition;
+    int nextId = 0;
+
+    Condition bufferNotFull[NUM_OF_TYPES];
+    Condition bufferNotEmpty[NUM_OF_TYPES];
+
+    std::queue<Request> requests[NUM_OF_TYPES];
+    std::queue<Result> results[NUM_OF_TYPES];
 };
 
 #endif // COMPUTATIONMANAGER_H
