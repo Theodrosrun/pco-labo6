@@ -65,6 +65,13 @@ void ComputationManager::abortComputation(int id) {
 
 Result ComputationManager::getNextResult() {
 
+     monitorIn();
+     auto c = Condition();
+     wait(c);
+     monitorOut();
+
+     return Result(-1, 0.0);
+
 //    monitorIn();
 
 //    while (requestQueue.empty()) {
@@ -88,7 +95,7 @@ Request ComputationManager::getWork(ComputationType computationType) {
 
         const unsigned type = static_cast<unsigned>(computationType);
 
-        if (requests[type].empty()) {
+        if (requests[type].size() == 0) {
            wait(bufferNotEmpty[type]);
         }
 
@@ -139,7 +146,7 @@ bool ComputationManager::continueWork(int id) {
 
 //    monitorOut();
 
-    return false;
+    return true;
 }
 
 void ComputationManager::provideResult(Result result) {
