@@ -22,8 +22,8 @@ int ComputationManager::requestComputation(Computation c) {
 
     monitorIn();
 
-    unsigned id = nextId++;
-    unsigned type = static_cast<unsigned>(c.computationType);
+    const unsigned id = nextId++;
+    const unsigned type = static_cast<unsigned>(c.computationType);
 
     if (requests[type].size() >= MAX_TOLERATED_QUEUE_SIZE) {
         wait(bufferNotFull[type]);
@@ -46,6 +46,7 @@ int ComputationManager::requestComputation(Computation c) {
 //    monitorOut();
 
 //    return id;
+
 }
 
 void ComputationManager::abortComputation(int id) {

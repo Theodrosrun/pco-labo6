@@ -197,9 +197,9 @@ private:
      */
     inline void throwStopException() {throw StopException();}
 
-    static const int NUM_OF_TYPES = 3;
-
     int nextId = 0;
+
+    static const unsigned NUM_OF_TYPES = 3;
 
     Condition bufferNotFull[NUM_OF_TYPES];
     Condition bufferNotEmpty[NUM_OF_TYPES];
