@@ -86,7 +86,7 @@ Request ComputationManager::getWork(ComputationType computationType) {
 
         monitorIn();
 
-        const unsigned type = static_cast<int>(computationType);
+        const unsigned type = static_cast<unsigned>(computationType);
 
         if (requests[type].empty()) {
            wait(bufferNotEmpty[type]);
