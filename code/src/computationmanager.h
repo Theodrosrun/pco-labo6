@@ -205,7 +205,9 @@ private:
     Condition requestsNotFull[NUM_OF_TYPES];
     Condition requestsNotEmpty[NUM_OF_TYPES];
 
-    std::queue<Result> results[NUM_OF_TYPES];
+    std::queue<Result> results;
+    Condition resultsNotFull[NUM_OF_TYPES];
+    Condition resultsNotEmpty;
 };
 
 #endif // COMPUTATIONMANAGER_H

@@ -66,12 +66,18 @@ void ComputationManager::abortComputation(int id) {
 
 Result ComputationManager::getNextResult() {
 
-     monitorIn();
-     auto c = Condition();
-     wait(c);
-     monitorOut();
+    monitorIn();
 
-     return Result(-1, 0.0);
+    if (results.size() == 0) {
+        wait(resultsNotEmpty);
+    }
+
+    Result result = results.front();
+    results.pop();
+
+    monitorOut();
+
+    return result;
 
 //    monitorIn();
 
@@ -154,12 +160,13 @@ bool ComputationManager::continueWork(int id) {
 
 void ComputationManager::provideResult(Result result) {
 
-//    monitorIn();
+    monitorIn();
 
-//    resultQueue.push_back(result); // Ajouter le résultat à la file d'attente
-//    signal(condition); // Signaler qu'un résultat est disponible
+    results.push(result);
 
-//    monitorOut();
+    signal(resultsNotEmpty);
+
+    monitorOut();
 
 }
 
