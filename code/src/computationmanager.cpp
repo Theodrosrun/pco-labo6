@@ -91,22 +91,22 @@ Result ComputationManager::getNextResult() {
 
 Request ComputationManager::getWork(ComputationType computationType) {
 
-        monitorIn();
+    monitorIn();
 
-        const unsigned type = static_cast<unsigned>(computationType);
+    const unsigned type = static_cast<unsigned>(computationType);
 
-        if (requests[type].size() == 0) {
-           wait(bufferNotEmpty[type]);
-        }
+    if (requests[type].size() == 0) {
+       wait(bufferNotEmpty[type]);
+    }
 
-        Request request = requests[type].front();
-        requests[type].pop();
+    Request request = requests[type].front();
+    requests[type].pop();
 
-        signal(bufferNotFull[type]);
+    signal(bufferNotFull[type]);
 
-        monitorOut();
+    monitorOut();
 
-        return request;
+    return request;
 
 //    monitorIn(); // Entrée dans le moniteur pour protéger l'accès concurrentiel
 
@@ -161,5 +161,4 @@ void ComputationManager::provideResult(Result result) {
 
 void ComputationManager::stop() {
     // TODO
-
 }
