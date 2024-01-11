@@ -212,7 +212,7 @@ private:
     Condition resultsNotFull[NUM_OF_TYPES];
     Condition resultsNotEmpty;
 
-    std::vector<int> requestID;
+    std::vector<int> requestsID;
 };
 
 #endif // COMPUTATIONMANAGER_H

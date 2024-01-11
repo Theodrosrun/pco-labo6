@@ -32,7 +32,7 @@ int ComputationManager::requestComputation(Computation c) {
 
     requests[type].push_back(Request(c, id));
 
-    requestID.push_back(id);
+    requestsID.push_back(id);
 
     signal(requestsNotEmpty[type]);
 
@@ -181,7 +181,7 @@ void ComputationManager::stop() {
 
 int ComputationManager::searchId() {
     for (size_t i = 0; i < results.size(); ++i) {
-        if (results[i].getId() == requestID.front()) {
+        if (results[i].getId() == requestsID.front()) {
             return i;
         }
     }
