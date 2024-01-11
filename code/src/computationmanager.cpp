@@ -73,7 +73,7 @@ Result ComputationManager::getNextResult() {
 
     int pos;
 
-     while((pos = searchId()) != -1) {
+     while((pos = searchId()) == -1) {
         wait(resultsNotEmpty);
     }
 
