@@ -12,6 +12,7 @@
 // afin de faire attendre les threads appelants et aussi afin que le code compile.
 
 #include "computationmanager.h"
+#include <algorithm>
 
 
 ComputationManager::ComputationManager(int maxQueueSize): MAX_TOLERATED_QUEUE_SIZE(maxQueueSize)
@@ -29,7 +30,9 @@ int ComputationManager::requestComputation(Computation c) {
         wait(requestsNotFull[type]);
     }
 
-    requests[type].push(Request(c, id));
+    requests[type].push_back(Request(c, id));
+
+    requestID.push_back(id);
 
     signal(requestsNotEmpty[type]);
 
@@ -68,12 +71,14 @@ Result ComputationManager::getNextResult() {
 
     monitorIn();
 
-    if (results.size() == 0) {
+    int pos;
+
+     while((pos = searchId()) != -1) {
         wait(resultsNotEmpty);
     }
 
-    Result result = results.front();
-    results.pop();
+    Result result = results[pos];
+    results.erase(results.begin() + pos);
 
     monitorOut();
 
@@ -108,7 +113,7 @@ Request ComputationManager::getWork(ComputationType computationType) {
     }
 
     Request request = requests[type].front();
-    requests[type].pop();
+    requests[type].pop_back();
 
     signal(requestsNotFull[type]);
 
@@ -162,7 +167,7 @@ void ComputationManager::provideResult(Result result) {
 
     monitorIn();
 
-    results.push(result);
+    results.push_back(result);
 
     signal(resultsNotEmpty);
 
@@ -172,4 +177,13 @@ void ComputationManager::provideResult(Result result) {
 
 void ComputationManager::stop() {
     // TODO
+}
+
+int ComputationManager::searchId() {
+    for (size_t i = 0; i < results.size(); ++i) {
+        if (results[i].getId() == requestID.front()) {
+            return i;
+        }
+    }
+    return -1;
 }
