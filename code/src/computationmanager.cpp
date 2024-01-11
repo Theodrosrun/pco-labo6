@@ -31,7 +31,6 @@ int ComputationManager::requestComputation(Computation c) {
     }
 
     requests[type].push_back(Request(c, id));
-
     requestsID.push_back(id);
 
     signal(requestsNotEmpty[type]);
@@ -39,66 +38,27 @@ int ComputationManager::requestComputation(Computation c) {
     monitorOut();
 
     return id;
-
-//    monitorIn();
-
-//    int id = nextId++;
-//    requestQueue.push_back(Request(c, id));
-//    signal(condition);
-
-//    monitorOut();
-
-//    return id;
-
 }
 
 void ComputationManager::abortComputation(int id) {
-
-//    monitorIn();
-
-//    for (auto it = requestQueue.begin(); it != requestQueue.end(); ++it) {
-//        if (it->getId() == id) {
-//            requestQueue.erase(it);
-//            break;
-//        }
-//    }
-
-//    monitorOut();
-
 }
 
 Result ComputationManager::getNextResult() {
 
     monitorIn();
 
-    int pos;
-
-     while((pos = searchId()) == -1) {
+    if(results[0].getId() != requestsID[0]) {
         wait(resultsNotEmpty);
     }
 
-    Result result = results[pos];
-    results.erase(results.begin() + pos);
+    Result result = results[0];
+
+    results.erase(results.begin());
+    requestsID.erase(requestsID.begin());
 
     monitorOut();
 
     return result;
-
-//    monitorIn();
-
-//    while (requestQueue.empty()) {
-//        wait(condition);
-//    }
-
-//    Request nextRequest = requestQueue.front();
-//    requestQueue.pop_front();
-
-//    // Création du résultat correspondant
-//    Result nextResult = Result(nextRequest.getId(), 4.0);
-
-//    monitorOut();
-
-//    return nextResult;
 
 }
 
@@ -112,8 +72,8 @@ Request ComputationManager::getWork(ComputationType computationType) {
        wait(requestsNotEmpty[type]);
     }
 
-    Request request = requests[type].front();
-    requests[type].pop_back();
+    Request request = requests[type][0];
+    requests[type].erase(requests[type].begin());
 
     signal(requestsNotFull[type]);
 
@@ -121,44 +81,9 @@ Request ComputationManager::getWork(ComputationType computationType) {
 
     return request;
 
-//    monitorIn(); // Entrée dans le moniteur pour protéger l'accès concurrentiel
-
-//    while(requestQueue.empty()) {
-//        wait(condition);
-//    }
-
-//    Request foundRequest;
-
-//    for (auto it = requestQueue.begin(); it != requestQueue.end(); ++it) {
-//        if (it->data) {
-//            foundRequest = *it;
-//            requestQueue.erase(it); // Supprimer la requête trouvée de la file d'attente
-//            break;
-//        }
-//    }
-
-//    monitorOut(); // Sortie du moniteur après l'opération critique
-
-//    return foundRequest;
-
 }
 
 bool ComputationManager::continueWork(int id) {
-
-//    monitorIn();
-
-//    for (auto it = requestQueue.begin(); it != requestQueue.end(); ++it) {
-//        if (it->getId() == id) {
-//            // Ici, vous pouvez effectuer le traitement de la demande en fonction de certains critères
-//            // Par exemple, marquer la demande pour continuer à travailler ou non
-
-//            monitorOut();
-
-//            return true; // ou false en fonction de la logique que vous voulez implémenter
-//        }
-//    }
-
-//    monitorOut();
 
     return true;
 }
@@ -169,7 +94,10 @@ void ComputationManager::provideResult(Result result) {
 
     results.push_back(result);
 
-    signal(resultsNotEmpty);
+    std::sort(results.begin(), results.end(), [](const Result& a, const Result& b) { return a.getId() < b.getId(); });
+
+    if(results[0].getId() == requestsID[0])
+        signal(resultsNotEmpty);
 
     monitorOut();
 
@@ -177,13 +105,4 @@ void ComputationManager::provideResult(Result result) {
 
 void ComputationManager::stop() {
     // TODO
-}
-
-int ComputationManager::searchId() {
-    for (size_t i = 0; i < results.size(); ++i) {
-        if (results[i].getId() == requestsID.front()) {
-            return i;
-        }
-    }
-    return -1;
 }

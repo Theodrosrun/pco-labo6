@@ -181,9 +181,6 @@ public:
      */
     void stop();
 
-    int searchId();
-
-
 protected:
 
     // Ajoutez vos attributs et déclarations de méthodes ici
