@@ -94,7 +94,7 @@ void ComputationManager::provideResult(Result result) {
 
     results.push_back(result);
 
-    std::sort(results.begin(), results.end(), [](const Result& a, const Result& b) { return a.getId() < b.getId(); });
+    std::sort(results.begin(), results.end(), [](const Result& a, const Result& b) { return a.getId() < b.getId(); }); // TODO - Optimise structure
 
     if(results[0].getId() == requestsID[0])
         signal(resultsNotEmpty);
