@@ -47,7 +47,7 @@ Result ComputationManager::getNextResult() {
 
     monitorIn();
 
-    if(results[0].getId() != requestsID[0]) {
+    if((results.empty()) || (results[0].getId() != requestsID[0])) {
         wait(resultsNotEmpty);
     }
 
