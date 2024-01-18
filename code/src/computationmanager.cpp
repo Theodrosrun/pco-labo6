@@ -41,6 +41,33 @@ int ComputationManager::requestComputation(Computation c) {
 }
 
 void ComputationManager::abortComputation(int id) {
+    monitorIn();
+
+    for(int i = 0; i < NUM_OF_TYPES; i++){
+        auto itRequest = std::find_if(requests[i].begin(), requests[i].end(), [id](const Request& request) { return request.getId() == id; });
+        if (itRequest != requests[i].end())
+        {
+            requests[i].erase(itRequest);
+            signal(requestsNotFull[i]);
+            break;
+        }
+    }
+
+    auto itRequestId = std::find(requestsID.begin(), requestsID.end(), id);
+    if(itRequestId != requestsID.end()){
+        requestsID.erase(itRequestId);
+    }
+
+    auto itResult = std::find_if(results.begin(), results.end(), [id](const Result& result) { return result.getId() == id; });
+    if (itResult != results.end())
+    {
+        results.erase(itResult);
+        if (itResult == results.begin()){
+            // signal(resultAvailable);
+        }
+    }
+
+    monitorOut();
 }
 
 Result ComputationManager::getNextResult() {
@@ -94,7 +121,7 @@ void ComputationManager::provideResult(Result result) {
 
     results.push_back(result);
 
-    std::sort(results.begin(), results.end(), [](const Result& a, const Result& b) { return a.getId() < b.getId(); }); // TODO - Optimise structure
+    std::sort(results.begin(), results.end(), [](const Result& a, const Result& b) { return a.getId() < b.getId(); });
 
     if(results[0].getId() == requestsID[0])
         signal(resultsNotEmpty);
