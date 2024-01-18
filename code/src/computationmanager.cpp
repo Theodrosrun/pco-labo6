@@ -63,7 +63,7 @@ void ComputationManager::abortComputation(int id) {
     {
         results.erase(itResult);
         if (itResult == results.begin()){
-            // signal(resultAvailable);
+            signal(resultsNotEmpty);
         }
     }
 
