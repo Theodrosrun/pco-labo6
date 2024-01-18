@@ -61,6 +61,7 @@ void ComputationManager::abortComputation(int id) {
     auto itResult = std::find_if(results.begin(), results.end(), [id](const Result& result) { return result.getId() == id; });
     if (itResult != results.end())
     {
+        // TODO - Mettre un else if
         results.erase(itResult);
         if (itResult == results.begin()){
             signal(resultsNotEmpty);
