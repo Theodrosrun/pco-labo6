@@ -113,10 +113,16 @@ Request ComputationManager::getWork(ComputationType computationType) {
 
 }
 
-bool ComputationManager::continueWork(int id) {
+//bool ComputationManager::continueWork(int id) {
 
-    return true;
-}
+//    monitorIn();
+
+//    // const bool continueWork = !isStopRequested && std::find(requestsID.begin(), requestsID.end(), id) != requestsID.end();
+
+//    monitorOut();
+
+//    return continueWork;
+//}
 
 void ComputationManager::provideResult(Result result) {
 
