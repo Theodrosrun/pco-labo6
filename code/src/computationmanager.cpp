@@ -26,9 +26,11 @@ int ComputationManager::requestComputation(Computation c) {
     const unsigned id = nextId++;
     const unsigned type = static_cast<unsigned>(c.computationType);
 
+    preCheck();
     if (requests[type].size() >= MAX_TOLERATED_QUEUE_SIZE) {
         wait(requestsNotFull[type]);
     }
+    postCheck(requestsNotFull[type]);
 
     requests[type].push_back(Request(c, id));
     requestsID.push_back(id);
@@ -77,9 +79,11 @@ Result ComputationManager::getNextResult() {
 
     monitorIn();
 
+    preCheck();
     if((results.empty()) || (results[0].getId() != requestsID[0])) {
         wait(resultsNotEmpty);
     }
+    postCheck(resultsNotEmpty);
 
     Result result = results[0];
 
@@ -98,9 +102,11 @@ Request ComputationManager::getWork(ComputationType computationType) {
 
     const unsigned type = static_cast<unsigned>(computationType);
 
+    preCheck();
     if (requests[type].size() == 0) {
        wait(requestsNotEmpty[type]);
     }
+    postCheck(requestsNotEmpty[type]);
 
     Request request = requests[type][0];
     requests[type].erase(requests[type].begin());
@@ -117,7 +123,7 @@ bool ComputationManager::continueWork(int id) {
 
     monitorIn();
 
-   const bool continueWork = !stopped && (std::find(requestsID.begin(), requestsID.end(), id) != requestsID.end());
+    const bool continueWork = !stopped && (std::find(requestsID.begin(), requestsID.end(), id) != requestsID.end());
 
     monitorOut();
 
@@ -144,5 +150,29 @@ void ComputationManager::stop() {
 
      stopped = true;
 
+     // TODO - signal counter
+     for (auto& cond: requestsNotFull) signal(cond);
+     for (auto& cond: requestsNotEmpty) signal(cond);
+     for (auto& cond: resultsNotFull) signal(cond);
+     signal(resultsNotEmpty);
+
      monitorOut();
 }
+
+void ComputationManager::preCheck() {
+    if (stopped)
+    {
+        monitorOut();
+        throwStopException();
+    }
+}
+
+void ComputationManager::postCheck(Condition& condition) {
+    if (stopped)
+    {
+        signal(condition);
+        monitorOut();
+        throwStopException();
+    }
+}
+

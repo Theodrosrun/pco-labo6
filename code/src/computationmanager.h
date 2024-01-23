@@ -181,6 +181,11 @@ public:
      */
     void stop();
 
+private:
+    void preCheck();
+
+    void postCheck(Condition& condition);
+
 protected:
 
     // Ajoutez vos attributs et déclarations de méthodes ici
