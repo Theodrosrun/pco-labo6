@@ -113,16 +113,16 @@ Request ComputationManager::getWork(ComputationType computationType) {
 
 }
 
-//bool ComputationManager::continueWork(int id) {
+bool ComputationManager::continueWork(int id) {
 
-//    monitorIn();
+    monitorIn();
 
-//    // const bool continueWork = !isStopRequested && std::find(requestsID.begin(), requestsID.end(), id) != requestsID.end();
+   const bool continueWork = !stopped && (std::find(requestsID.begin(), requestsID.end(), id) != requestsID.end());
 
-//    monitorOut();
+    monitorOut();
 
-//    return continueWork;
-//}
+    return continueWork;
+}
 
 void ComputationManager::provideResult(Result result) {
 
@@ -140,5 +140,9 @@ void ComputationManager::provideResult(Result result) {
 }
 
 void ComputationManager::stop() {
-    // TODO
+     monitorIn();
+
+     stopped = true;
+
+     monitorOut();
 }
