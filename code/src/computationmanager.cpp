@@ -149,10 +149,15 @@ void ComputationManager::stop() {
 
      stopped = true;
 
-     // TODO - signal counter
-     for (auto& cond: requestsNotFull) signal(cond);
-     for (auto& cond: requestsNotEmpty) signal(cond);
-     for (auto& cond: resultsNotFull) signal(cond);
+     for (auto& condition: requestsNotFull)
+         signal(condition);
+
+     for (auto& condition: requestsNotEmpty)
+         signal(condition);
+
+     for (auto& condition: resultsNotFull)
+         signal(condition);
+
      signal(resultsNotEmpty);
 
      monitorOut();
