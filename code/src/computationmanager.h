@@ -187,10 +187,6 @@ public:
 
 protected:
 
-    // Ajoutez vos attributs et déclarations de méthodes ici
-    // P.ex. variables conditions et structure de données pour le buffer
-
-    // Queues
     const size_t MAX_TOLERATED_QUEUE_SIZE;
 
     bool stopped = false;
