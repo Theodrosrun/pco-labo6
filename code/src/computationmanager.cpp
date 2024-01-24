@@ -29,9 +29,8 @@ int ComputationManager::requestComputation(Computation c) {
     const unsigned type = static_cast<unsigned>(c.computationType);
 
     preStopCheck();
-    if (requests[type].size() >= MAX_TOLERATED_QUEUE_SIZE) {
+    if (requests[type].size() >= MAX_TOLERATED_QUEUE_SIZE)
         wait(requestsNotFull[type]);
-    }
     postStopCheck(requestsNotFull[type]);
 
     requests[type].push_back(Request(c, id));
@@ -58,9 +57,8 @@ void ComputationManager::abortComputation(int id) {
     }
 
     auto itRequestId = std::find(requestsID.begin(), requestsID.end(), id);
-    if(itRequestId != requestsID.end()){
+    if(itRequestId != requestsID.end())
         requestsID.erase(itRequestId);
-    }
 
     auto itResult = std::find_if(results.begin(), results.end(), [id](const Result& result) { return result.getId() == id; });
     if (itResult != results.end())
@@ -79,9 +77,8 @@ Result ComputationManager::getNextResult() {
     monitorIn();
 
     preStopCheck();
-    if((results.empty()) || (results[0].getId() != requestsID[0])) {
+    if((results.empty()) || (results[0].getId() != requestsID[0]))
         wait(resultsNotEmpty);
-    }
     postStopCheck(resultsNotEmpty);
 
     Result result = results[0];
@@ -104,9 +101,8 @@ Request ComputationManager::getWork(ComputationType computationType) {
     const unsigned type = static_cast<unsigned>(computationType);
 
     preStopCheck();
-    if (requests[type].size() == 0) {
+    if (requests[type].size() == 0)
        wait(requestsNotEmpty[type]);
-    }
     postStopCheck(requestsNotEmpty[type]);
 
     Request request = requests[type][0];
@@ -178,4 +174,3 @@ void ComputationManager::postStopCheck(Condition& condition) {
         throwStopException();
     }
 }
-
