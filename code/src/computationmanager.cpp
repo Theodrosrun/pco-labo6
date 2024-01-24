@@ -19,6 +19,8 @@ ComputationManager::ComputationManager(int maxQueueSize): MAX_TOLERATED_QUEUE_SI
 {
 }
 
+// Client Interface
+
 int ComputationManager::requestComputation(Computation c) {
 
     monitorIn();
@@ -63,13 +65,10 @@ void ComputationManager::abortComputation(int id) {
     auto itResult = std::find_if(results.begin(), results.end(), [id](const Result& result) { return result.getId() == id; });
     if (itResult != results.end())
     {
-        // TODO - Mettre un else if
         results.erase(itResult);
-        if (itResult == results.begin()){
+        if (itResult == results.begin())
             signal(resultsNotEmpty);
-        } else {
 
-        }
     }
 
     monitorOut();
@@ -95,6 +94,8 @@ Result ComputationManager::getNextResult() {
     return result;
 
 }
+
+// Compute Engine Interface
 
 Request ComputationManager::getWork(ComputationType computationType) {
 
@@ -144,6 +145,8 @@ void ComputationManager::provideResult(Result result) {
     monitorOut();
 
 }
+
+// Control Interface
 
 void ComputationManager::stop() {
      monitorIn();
