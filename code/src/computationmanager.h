@@ -181,7 +181,6 @@ public:
      */
     void stop();
 
-private:
     void preStopCheck();
 
     void postStopCheck(Condition& condition);
