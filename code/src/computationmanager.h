@@ -199,14 +199,13 @@ private:
     static const unsigned NUM_OF_TYPES = 3;
 
     std::vector<Request> requests[NUM_OF_TYPES];
+    std::vector<int> requestsID;
     Condition requestsNotFull[NUM_OF_TYPES];
     Condition requestsNotEmpty[NUM_OF_TYPES];
 
     std::vector<Result> results;
     Condition resultsNotFull[NUM_OF_TYPES];
     Condition resultsNotEmpty;
-
-    std::vector<int> requestsID;
 };
 
 #endif // COMPUTATIONMANAGER_H
