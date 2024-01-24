@@ -26,11 +26,11 @@ int ComputationManager::requestComputation(Computation c) {
     const unsigned id = nextId++;
     const unsigned type = static_cast<unsigned>(c.computationType);
 
-    preCheck();
+    preStopCheck();
     if (requests[type].size() >= MAX_TOLERATED_QUEUE_SIZE) {
         wait(requestsNotFull[type]);
     }
-    postCheck(requestsNotFull[type]);
+    postStopCheck(requestsNotFull[type]);
 
     requests[type].push_back(Request(c, id));
     requestsID.push_back(id);
@@ -79,11 +79,11 @@ Result ComputationManager::getNextResult() {
 
     monitorIn();
 
-    preCheck();
+    preStopCheck();
     if((results.empty()) || (results[0].getId() != requestsID[0])) {
         wait(resultsNotEmpty);
     }
-    postCheck(resultsNotEmpty);
+    postStopCheck(resultsNotEmpty);
 
     Result result = results[0];
 
@@ -102,11 +102,11 @@ Request ComputationManager::getWork(ComputationType computationType) {
 
     const unsigned type = static_cast<unsigned>(computationType);
 
-    preCheck();
+    preStopCheck();
     if (requests[type].size() == 0) {
        wait(requestsNotEmpty[type]);
     }
-    postCheck(requestsNotEmpty[type]);
+    postStopCheck(requestsNotEmpty[type]);
 
     Request request = requests[type][0];
     requests[type].erase(requests[type].begin());
@@ -159,7 +159,7 @@ void ComputationManager::stop() {
      monitorOut();
 }
 
-void ComputationManager::preCheck() {
+void ComputationManager::preStopCheck() {
     if (stopped)
     {
         monitorOut();
@@ -167,7 +167,7 @@ void ComputationManager::preCheck() {
     }
 }
 
-void ComputationManager::postCheck(Condition& condition) {
+void ComputationManager::postStopCheck(Condition& condition) {
     if (stopped)
     {
         signal(condition);

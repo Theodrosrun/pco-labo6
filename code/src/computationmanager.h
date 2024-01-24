@@ -182,9 +182,9 @@ public:
     void stop();
 
 private:
-    void preCheck();
+    void preStopCheck();
 
-    void postCheck(Condition& condition);
+    void postStopCheck(Condition& condition);
 
 protected:
 
