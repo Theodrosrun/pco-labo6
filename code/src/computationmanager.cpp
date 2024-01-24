@@ -77,11 +77,11 @@ Result ComputationManager::getNextResult() {
     monitorIn();
 
     preStopCheck();
-    if((results.empty()) || (results[0].getId() != requestsID[0]))
+    if((results.empty()) || (results.front().getId() != requestsID.front()))
         wait(resultsNotEmpty);
     postStopCheck(resultsNotEmpty);
 
-    Result result = results[0];
+    Result result = results.front();
 
     results.erase(results.begin());
     requestsID.erase(requestsID.begin());
@@ -105,7 +105,7 @@ Request ComputationManager::getWork(ComputationType computationType) {
        wait(requestsNotEmpty[type]);
     postStopCheck(requestsNotEmpty[type]);
 
-    Request request = requests[type][0];
+    Request request = requests[type].front();
     requests[type].erase(requests[type].begin());
 
     signal(requestsNotFull[type]);
@@ -135,7 +135,7 @@ void ComputationManager::provideResult(Result result) {
 
     std::sort(results.begin(), results.end(), [](const Result& a, const Result& b) { return a.getId() < b.getId(); });
 
-    if(results[0].getId() == requestsID[0])
+    if(results.front().getId() == requestsID.front())
         signal(resultsNotEmpty);
 
     monitorOut();
