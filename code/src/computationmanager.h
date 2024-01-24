@@ -176,9 +176,6 @@ public:
     void provideResult(Result result) override;
 
     // Control Interface
-    /**
-     * @brief stop Is used when the buffer is stopped, will release and interrupt waiting threads
-     */
     void stop();
 
     void preStopCheck();
