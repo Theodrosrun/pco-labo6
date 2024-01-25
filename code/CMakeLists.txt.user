@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE QtCreatorProject>
-<!-- Written by QtCreator 4.14.0, 2024-01-23T19:14:13. -->
+<!-- Written by QtCreator 4.14.0, 2024-01-24T20:06:25. -->
 <qtcreator>
  <data>
   <variable>EnvironmentId</variable>
@@ -119,7 +119,7 @@
    <value type="QString" key="ProjectExplorer.ProjectConfiguration.Id">{132a3090-fa62-468c-94f3-b487320a5115}</value>
    <value type="int" key="ProjectExplorer.Target.ActiveBuildConfiguration">0</value>
    <value type="int" key="ProjectExplorer.Target.ActiveDeployConfiguration">0</value>
-   <value type="int" key="ProjectExplorer.Target.ActiveRunConfiguration">0</value>
+   <value type="int" key="ProjectExplorer.Target.ActiveRunConfiguration">1</value>
    <valuemap type="QVariantMap" key="ProjectExplorer.Target.BuildConfiguration.0">
     <value type="QString" key="CMake.Initial.Parameters">-GCodeBlocks - Unix Makefiles
 -DCMAKE_BUILD_TYPE:String=Debug

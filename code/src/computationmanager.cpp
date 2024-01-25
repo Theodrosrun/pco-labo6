@@ -174,7 +174,7 @@ void ComputationManager::preStopCheck() {
 void ComputationManager::postStopCheck(Condition& condition) {
     if (stopped)
     {
-        signal(condition);
+        signal(condition);  // Signalement en cascade
         monitorOut();
         throwStopException();
     }
