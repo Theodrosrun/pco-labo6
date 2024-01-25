@@ -46,7 +46,7 @@ int ComputationManager::requestComputation(Computation c) {
 void ComputationManager::abortComputation(int id) {
     monitorIn();
 
-    for(int i = 0; i < NUM_OF_TYPES; i++){
+    for(unsigned i = 0; i < NUM_OF_TYPES; i++){
         auto itRequest = std::find_if(requests[i].begin(), requests[i].end(), [id](const Request& request) { return request.getId() == id; });
         if (itRequest != requests[i].end())
         {
