@@ -51,7 +51,7 @@ void ComputationManager::abortComputation(int id) {
 
     // Delete the request
     for(unsigned i = 0; i < NUM_OF_TYPES; i++){
-        auto itRequest = std::find_if(requests[i].begin(), requests[i].end(), [id](const Request& request) { return request.getId() == id; });
+        const auto itRequest = std::find_if(requests[i].begin(), requests[i].end(), [id](const Request& request) { return request.getId() == id; });
         if (itRequest != requests[i].end())
         {
             requests[i].erase(itRequest);
@@ -61,12 +61,12 @@ void ComputationManager::abortComputation(int id) {
     }
 
     // Delete the ID of the request
-    auto itRequestId = std::find(requestsID.begin(), requestsID.end(), id);
+    const auto itRequestId = std::find(requestsID.begin(), requestsID.end(), id);
     if(itRequestId != requestsID.end())
         requestsID.erase(itRequestId);
 
     // Delete the result
-    auto itResult = std::find_if(results.begin(), results.end(), [id](const Result& result) { return result.getId() == id; });
+    const auto itResult = std::find_if(results.begin(), results.end(), [id](const Result& result) { return result.getId() == id; });
     if (itResult != results.end())
     {
         results.erase(itResult);
@@ -89,7 +89,7 @@ Result ComputationManager::getNextResult() {
 
     postStopCheck(resultsNotEmpty);
 
-    Result result = results.front();
+    const Result result = results.front();
 
     results.erase(results.begin());
     requestsID.erase(requestsID.begin());
@@ -116,7 +116,7 @@ Request ComputationManager::getWork(ComputationType computationType) {
 
     postStopCheck(requestsNotEmpty[type]);
 
-    Request request = requests[type].front();
+    const Request request = requests[type].front();
     requests[type].erase(requests[type].begin());
 
     signal(requestsNotFull[type]);
