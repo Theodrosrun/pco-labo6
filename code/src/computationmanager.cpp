@@ -29,8 +29,11 @@ int ComputationManager::requestComputation(Computation c) {
     const unsigned type = static_cast<unsigned>(c.computationType);
 
     preStopCheck();
+
+    // Wait if the requests vector is full
     if (requests[type].size() >= MAX_TOLERATED_QUEUE_SIZE)
         wait(requestsNotFull[type]);
+
     postStopCheck(requestsNotFull[type]);
 
     requests[type].push_back(Request(c, id));
@@ -79,8 +82,11 @@ Result ComputationManager::getNextResult() {
     monitorIn();
 
     preStopCheck();
+
+    // Wait if the results vector is empty or if the first result in the results vector is not the awaited result
     if((results.empty()) || (results.front().getId() != requestsID.front()))
         wait(resultsNotEmpty);
+
     postStopCheck(resultsNotEmpty);
 
     Result result = results.front();
@@ -103,8 +109,11 @@ Request ComputationManager::getWork(ComputationType computationType) {
     const unsigned type = static_cast<unsigned>(computationType);
 
     preStopCheck();
+
+    // Wait if the requests vector is empty
     if (requests[type].size() == 0)
        wait(requestsNotEmpty[type]);
+
     postStopCheck(requestsNotEmpty[type]);
 
     Request request = requests[type].front();
@@ -122,7 +131,7 @@ bool ComputationManager::continueWork(int id) {
 
     monitorIn();
 
-    // Check if no stop was requested and if the computation is still awaited.
+    // Check if no stop was requested and if the computation is still awaited
     const bool continueWork = !stopped && (std::find(requestsID.begin(), requestsID.end(), id) != requestsID.end());
 
     monitorOut();
@@ -139,7 +148,7 @@ void ComputationManager::provideResult(Result result) {
     // Sort the vector based on the IDs of the Result objects
     std::sort(results.begin(), results.end(), [](const Result& a, const Result& b) { return a.getId() < b.getId(); });
 
-    // Check if the ID of the first element in the results vector matches the first ID in requestsID
+    // Check if the ID of the first element in the results vector is the awaited result
     if(results.front().getId() == requestsID.front())
         signal(resultsNotEmpty);
 
@@ -154,6 +163,7 @@ void ComputationManager::stop() {
 
      stopped = true;
 
+     // Release all threads
      for (auto& condition: requestsNotFull)
          signal(condition);
 
@@ -179,7 +189,7 @@ void ComputationManager::preStopCheck() {
 void ComputationManager::postStopCheck(Condition& condition) {
     if (stopped)
     {
-        signal(condition);  // Release the next awating thread
+        signal(condition);  // Release the next awaiting thread
         monitorOut();
         throwStopException();
     }
