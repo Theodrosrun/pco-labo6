@@ -46,6 +46,7 @@ int ComputationManager::requestComputation(Computation c) {
 void ComputationManager::abortComputation(int id) {
     monitorIn();
 
+    // Delete the request
     for(unsigned i = 0; i < NUM_OF_TYPES; i++){
         auto itRequest = std::find_if(requests[i].begin(), requests[i].end(), [id](const Request& request) { return request.getId() == id; });
         if (itRequest != requests[i].end())
@@ -56,17 +57,18 @@ void ComputationManager::abortComputation(int id) {
         }
     }
 
+    // Delete the ID of the request
     auto itRequestId = std::find(requestsID.begin(), requestsID.end(), id);
     if(itRequestId != requestsID.end())
         requestsID.erase(itRequestId);
 
+    // Delete the result
     auto itResult = std::find_if(results.begin(), results.end(), [id](const Result& result) { return result.getId() == id; });
     if (itResult != results.end())
     {
         results.erase(itResult);
         if (itResult == results.begin())
             signal(resultsNotEmpty);
-
     }
 
     monitorOut();
@@ -133,8 +135,10 @@ void ComputationManager::provideResult(Result result) {
 
     results.push_back(result);
 
+    // Sort the vector based on the IDs of the Result objects
     std::sort(results.begin(), results.end(), [](const Result& a, const Result& b) { return a.getId() < b.getId(); });
 
+    // Check if the ID of the first element in the results vector matches the first ID in requestsID.
     if(results.front().getId() == requestsID.front())
         signal(resultsNotEmpty);
 
@@ -174,7 +178,7 @@ void ComputationManager::preStopCheck() {
 void ComputationManager::postStopCheck(Condition& condition) {
     if (stopped)
     {
-        signal(condition);  // Signalement en cascade
+        signal(condition);  // Release the next awating thread
         monitorOut();
         throwStopException();
     }
