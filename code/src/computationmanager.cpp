@@ -36,6 +36,7 @@ int ComputationManager::requestComputation(Computation c) {
 
     postStopCheck(requestsNotFull[type]);
 
+    // Add the request
     requests[type].push_back(Request(c, id));
     requestsID.push_back(id);
 
@@ -91,6 +92,7 @@ Result ComputationManager::getNextResult() {
 
     const Result result = results.front();
 
+    // Remove the result and the request ID
     results.erase(results.begin());
     requestsID.erase(requestsID.begin());
 
@@ -116,6 +118,7 @@ Request ComputationManager::getWork(ComputationType computationType) {
 
     postStopCheck(requestsNotEmpty[type]);
 
+    // Get the request and remove it
     const Request request = requests[type].front();
     requests[type].erase(requests[type].begin());
 
