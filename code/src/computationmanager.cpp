@@ -122,6 +122,7 @@ bool ComputationManager::continueWork(int id) {
 
     monitorIn();
 
+    // Check if no stop was requested and if the computation is still awaited.
     const bool continueWork = !stopped && (std::find(requestsID.begin(), requestsID.end(), id) != requestsID.end());
 
     monitorOut();
@@ -138,7 +139,7 @@ void ComputationManager::provideResult(Result result) {
     // Sort the vector based on the IDs of the Result objects
     std::sort(results.begin(), results.end(), [](const Result& a, const Result& b) { return a.getId() < b.getId(); });
 
-    // Check if the ID of the first element in the results vector matches the first ID in requestsID.
+    // Check if the ID of the first element in the results vector matches the first ID in requestsID
     if(results.front().getId() == requestsID.front())
         signal(resultsNotEmpty);
 
