@@ -198,12 +198,16 @@ private:
 
     static const unsigned NUM_OF_TYPES = 3;
 
+    // Requests
     Condition requestsNotFull[NUM_OF_TYPES];
     Condition requestsNotEmpty[NUM_OF_TYPES];
+
     std::vector<int> requestsID;
     std::vector<Request> requests[NUM_OF_TYPES];
 
+    // Results
     Condition resultsNotFull[NUM_OF_TYPES];
+
     Condition resultsNotEmpty;
     std::vector<Result> results;
 };
