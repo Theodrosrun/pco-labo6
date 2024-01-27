@@ -167,7 +167,7 @@ void ComputationManager::stop() {
 
      stopped = true;
 
-     // Signal all threads
+     // Signal all conditions
      for (auto& condition: requestsNotFull)
          signal(condition);
 
