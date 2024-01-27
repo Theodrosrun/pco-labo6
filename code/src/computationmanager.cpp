@@ -71,7 +71,8 @@ void ComputationManager::abortComputation(int id) {
     if (itResult != results.end())
     {
         results.erase(itResult);
-        if (itResult == results.begin())
+        // Signal if the ID of the first element in the results vector is the awaited result
+        if (results.front().getId() == requestsID.front())
             signal(resultsNotEmpty);
     }
 
@@ -151,7 +152,7 @@ void ComputationManager::provideResult(Result result) {
     // Sort the vector based on the IDs of the Result objects
     std::sort(results.begin(), results.end(), [](const Result& a, const Result& b) { return a.getId() < b.getId(); });
 
-    // Check if the ID of the first element in the results vector is the awaited result
+    // Signal if the ID of the first element in the results vector is the awaited result
     if(results.front().getId() == requestsID.front())
         signal(resultsNotEmpty);
 
@@ -166,7 +167,7 @@ void ComputationManager::stop() {
 
      stopped = true;
 
-     // Release all threads
+     // Signal all threads
      for (auto& condition: requestsNotFull)
          signal(condition);
 
@@ -192,7 +193,8 @@ void ComputationManager::preStopCheck() {
 void ComputationManager::postStopCheck(Condition& condition) {
     if (stopped)
     {
-        signal(condition);  // Release the next awaiting thread
+        // Signal the next awaiting thread
+        signal(condition);
         monitorOut();
         throwStopException();
     }
