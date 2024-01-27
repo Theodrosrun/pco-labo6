@@ -174,9 +174,6 @@ void ComputationManager::stop() {
      for (auto& condition: requestsNotEmpty)
          signal(condition);
 
-     for (auto& condition: resultsNotFull)
-         signal(condition);
-
      signal(resultsNotEmpty);
 
      monitorOut();

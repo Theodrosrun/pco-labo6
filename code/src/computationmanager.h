@@ -206,9 +206,8 @@ private:
     std::vector<Request> requests[NUM_OF_TYPES];
 
     // Results
-    Condition resultsNotFull[NUM_OF_TYPES];
-
     Condition resultsNotEmpty;
+
     std::vector<Result> results;
 };
 
