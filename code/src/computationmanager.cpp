@@ -72,7 +72,7 @@ void ComputationManager::abortComputation(int id) {
     {
         results.erase(itResult);
         // Signal if the ID of the first element in the results vector is the awaited result
-        if (results.front().getId() == requestsID.front())
+        if (!results.empty() && !requestsID.empty() && (results.front().getId() == requestsID.front()))
             signal(resultsNotEmpty);
     }
 
